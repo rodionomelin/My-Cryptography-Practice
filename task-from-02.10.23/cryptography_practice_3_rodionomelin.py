@@ -2,7 +2,7 @@
 #Группа: 4Б02 МКН-41
 
 class CaesarCipher:
-    def __init__(self, alphabet,  shift):
+    def __init__(self, alphabet, shift):
         self.alphabet = alphabet
         self.shift = shift
         self.alpha_len = len(self.alphabet)
@@ -10,9 +10,12 @@ class CaesarCipher:
     def encrypt(self, text):
         encrypted = ''
         for char in text:
+            is_upper = char.isupper()
+            char = char.upper()
             if char in self.alphabet:
                 idx = (self.alphabet.index(char) + self.shift) % self.alpha_len
-                encrypted += self.alphabet[idx]
+                encrypted_char = self.alphabet[idx]
+                encrypted += encrypted_char if is_upper else encrypted_char.lower()
             else:
                 encrypted += char
         return encrypted
@@ -20,27 +23,31 @@ class CaesarCipher:
     def decrypt(self, text):
         decrypted = ''
         for char in text:
+            is_upper = char.isupper()
+            char = char.upper()
             if char in self.alphabet:
                 idx = (self.alphabet.index(char) - self.shift) % self.alpha_len
-                decrypted += self.alphabet[idx]
+                decrypted_char = self.alphabet[idx]
+                decrypted += decrypted_char if is_upper else decrypted_char.lower()
             else:
                 decrypted += char
         return decrypted
 
-def crackCaesar(alphabet, freq, text):
 
+def crackCaesar(alphabet, freq, text):
     alpha_len = len(alphabet)
-    
     max_corr = -1
     probable_shift = 0
     
     for shift in range(alpha_len):
         decrypted_text = ""
-
         for char in text:
+            is_upper = char.isupper()
+            char = char.upper()
             if char in alphabet:
                 char_index = alphabet.index(char)
-                decrypted_text += alphabet[(char_index - shift) % alpha_len]
+                new_char = alphabet[(char_index - shift) % alpha_len]
+                decrypted_text += new_char if is_upper else new_char.lower()
             else:
                 decrypted_text += char
         
@@ -64,9 +71,12 @@ def crackCaesar(alphabet, freq, text):
     
     decrypted_text = ""
     for char in text:
+        is_upper = char.isupper()
+        char = char.upper()
         if char in alphabet:
             char_index = alphabet.index(char)
-            decrypted_text += alphabet[(char_index - probable_shift) % alpha_len]
+            new_char = alphabet[(char_index - probable_shift) % alpha_len]
+            decrypted_text += new_char if is_upper else new_char.lower()
         else:
             decrypted_text += char
     
@@ -89,6 +99,7 @@ def frequency_analysis(text, alphabet):
 
 def task1():
     print('\nПример с Русским языком')
+
     alphabet_ru = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
 
     ru_freq = [
@@ -102,7 +113,33 @@ def task1():
 
     cipher = CaesarCipher(alphabet_ru, shift)
 
-    original_text = "ПРИМЕРШИФРОТЕКСТА"
+    original_text = '''
+Я встретил путника; он шёл из стран далёких
+И мне сказал: вдали, где вечность сторожит
+Пустыни тишину, среди песков глубоких
+Обломок статуи распавшейся лежит.
+Из полустёртых черт сквозит надменный пламень,
+Желанье заставлять весь мир себе служить;
+Ваятель опытный вложил в бездушный камень
+Те страсти, что могли столетья пережить.
+И сохранил слова обломок изваянья: —
+«Я — Озимандия, я — мощный царь царей!
+Взгляните на мои великие деянья,
+Владыки всех времён, всех стран и всех морей!»
+Кругом нет ничего… Глубокое молчанье…
+Пустыня мёртвая… И небеса над ней…
+
+Проснитесь и пойте, мистер Фримен. 
+Проснитесь и пойте. 
+Нет, я не хочу сказать, что Вы спите на работе. 
+Никто не заслуживает отдыха больше вашего. 
+И все усилия мира пропали бы даром, пока... 
+Скажем просто, что Ваш час снова пробил. 
+Нужный человек не в том месте может перевернуть мир. 
+Так проснитесь же, мистер Фримен. 
+Проснитесь, вас снова ждут великие дела.
+'''
+
     print(f"[+] Original: {original_text}")
 
     encrypted_text = cipher.encrypt(original_text)
@@ -125,7 +162,9 @@ def task1():
 
 def task1_1():
     print('\nПример с Английским языком')
+    
     alphabet_en = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
     en_freq = [
         8.2, 1.5, 2.8, 4.3, 12.7, 2.2, 2.0, 6.1, 7.0, 0.15,
         0.77, 4.0, 2.4, 6.7, 7.5, 1.9, 0.095, 6.0, 6.3, 9.1,
@@ -136,20 +175,29 @@ def task1_1():
     cipher = CaesarCipher(alphabet_en, shift)
 
     original_text = '''
-I MET A TRAVELLER FROM AN ANTIQUE LAND,
-WHO SAID—“TWO VAST AND TRUNKLESS LEGS OF STONE
-STAND IN THE DESERT. . . . NEAR THEM, ON THE SAND,
-HALF SUNK A SHATTERED VISAGE LIES, WHOSE FROWN,
-AND WRINKLED LIP, AND SNEER OF COLD COMMAND,
-TELL THAT ITS SCULPTOR WELL THOSE PASSIONS READ
-WHICH YET SURVIVE, STAMPED ON THESE LIFELESS THINGS,
-THE HAND THAT MOCKED THEM, AND THE HEART THAT FED;
-AND ON THE PEDESTAL, THESE WORDS APPEAR:
-MY NAME IS OZYMANDIAS, KING OF KINGS;
-LOOK ON MY WORKS, YE MIGHTY, AND DESPAIR!
-NOTHING BESIDE REMAINS. ROUND THE DECAY
-OF THAT COLOSSAL WRECK, BOUNDLESS AND BARE
-THE LONE AND LEVEL SANDS STRETCH FAR AWAY.
+I met a traveller from an antique land,
+Who said—“Two vast and trunkless legs of stone
+Stand in the desert. . . . Near them, on the sand,
+Half sunk a shattered visage lies, whose frown,
+And wrinkled lip, and sneer of cold command,
+Tell that its sculptor well those passions read
+Which yet survive, stamped on these lifeless things,
+The hand that mocked them, and the heart that fed;
+And on the pedestal, these words appear:
+My name is Ozymandias, King of Kings;
+Look on my Works, ye Mighty, and despair!
+Nothing beside remains. Round the decay
+Of that colossal Wreck, boundless and bare
+The lone and level sands stretch far away.
+
+Rise and shine, Mr. Freeman.
+Rise and shine...
+Not that I wish to imply that you have been sleeping on the job. 
+No one is more deserving of a rest, and all the effort in the world would have gone to waste until...
+Well... Lets just say your hour has come again.
+The right man in the wrong place can make all the difference in the world.
+So, wake up Mr. Freeman.
+Wake up and... Smell the ashes.
 '''
 
     print(f"\n[+] Original: {original_text}")
