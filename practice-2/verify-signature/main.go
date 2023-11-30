@@ -1,7 +1,7 @@
 package main
 
 import (
-    "fmt"
+    "log"
     "math/big"
     "crypto/sha256"
     "encoding/hex"
@@ -76,9 +76,9 @@ func handleVerifySignature(w http.ResponseWriter, r *http.Request) {
 
 func main() {
     http.HandleFunc("/verify-signature", handleVerifySignature)
-    fmt.Printf("Server starting on %s\n", HostPort)
+    log.Printf("[+] Service_2 is running on port %s...\n", HostPort)
     err := http.ListenAndServe(HostPort, nil)
     if err != nil {
-        fmt.Println("Error starting server:", err)
+        log.Fatal(err)
     }
 }

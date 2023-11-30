@@ -1,13 +1,13 @@
 package main
 
 import (
-    "encoding/json"
-    "fmt"
+    "log"
     "math/big"
-    "net/http"
     "crypto/sha256"
-    "crypto/rand"
     "encoding/hex"
+    "encoding/json"
+    "net/http"
+    "crypto/rand"
     "io/ioutil"
 )
 
@@ -39,11 +39,11 @@ func generateRSAKeys(bitSize int) RSAKey {
     // Generate two large primes, p and q
     p, err := generateLargePrime(bitSize / 2)
     if err != nil {
-        fmt.Println("Failed to generate a large prime:", err)
+        log.Fatal("Failed to generate a large prime:", err)
     }
     q, err := generateLargePrime(bitSize / 2 )
     if err != nil {
-        fmt.Println("Failed to generate a large prime:", err)
+        log.Fatal("Failed to generate a large prime:", err)
     }
 
     // Calculate n = p * q
@@ -131,9 +131,9 @@ func handleSignature(w http.ResponseWriter, r *http.Request) {
 func main() {
     // Set up HTTP server
     http.HandleFunc("/signature", handleSignature)
-    fmt.Printf("Server starting on %s\n", HostPort)
+    log.Printf("[+] Service_1 is running on port %s...\n", HostPort)
     err := http.ListenAndServe(HostPort, nil)
     if err != nil {
-        fmt.Println("Error starting server:", err)
+        log.Fatal(err)
     }
 }
