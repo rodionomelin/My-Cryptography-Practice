@@ -84,17 +84,13 @@ def crackCaesar(alphabet, freq, text):
 
 
 def frequency_analysis(text, alphabet):
+
     letter_freq = {letter: 0 for letter in alphabet}
-    total_letters = 0
-    
+
     for char in text:
-        if char in alphabet:
-            letter_freq[char] += 1
-            total_letters += 1
-    
-    for letter, count in letter_freq.items():
-        letter_freq[letter] = (count / total_letters) * 100
-        
+        if char.upper() in alphabet or char.lower() in alphabet:
+            letter_freq[char.upper()] += 1
+
     return letter_freq
 
 def task1():
@@ -151,7 +147,7 @@ def task1():
     cracked_text = crackCaesar(alphabet_ru, ru_freq, encrypted_text)
     print(f"\n[+] Cracked: {cracked_text}")
 
-    freq_ru = frequency_analysis(encrypted_text, alphabet_ru)
+    freq_ru = frequency_analysis(original_text, alphabet_ru)
     print(f"\n[+] Frequencies:")
     for letter, frequency in freq_ru.items():
         if frequency > 0:
@@ -211,7 +207,7 @@ Wake up and... Smell the ashes.
     cracked_text = crackCaesar(alphabet_en, en_freq, encrypted_text)
     print(f"\n[+] Cracked: {cracked_text}")
 
-    freq_en = frequency_analysis(encrypted_text, alphabet_en)
+    freq_en = frequency_analysis(original_text, alphabet_en)
     print(f"[+] Frequencies:")
     for letter, frequency in freq_en.items():
         if frequency > 0:
